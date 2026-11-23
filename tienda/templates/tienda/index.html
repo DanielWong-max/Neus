@@ -1,0 +1,1315 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS | Tienda de Videojuegos</title>
+
+<link rel="stylesheet" href="{% static 'tienda/css/styles.css' %}">
+
+<style>
+
+/* ==========================================
+   NEXUS - DISEÑO GENERAL
+========================================== */
+
+.nexus-admin-bar {
+    background: #241b42;
+    border-bottom: 2px solid #8b5cf6;
+    padding: 14px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nexus-admin-bar p {
+    color: #ddd;
+    margin: 0;
+    font-size: 14px;
+}
+
+.nexus-admin-btn {
+    display: inline-block;
+    padding: 11px 17px;
+    border-radius: 8px;
+    background: #8b5cf6;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.nexus-admin-btn.secundario {
+    background: #44336e;
+}
+
+.nexus-usuario {
+    color: #d8caff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.nexus-acceso-admin {
+    color: #d8caff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nexus-acciones-cuenta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.nexus-cerrar-sesion {
+    background: #b73550;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ==========================================
+   NUEVO - BOTONES DE MENSAJES
+========================================== */
+
+.nexus-boton-mensajes {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7
+    );
+    color: white !important;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px #7c3aed33;
+}
+
+.nexus-boton-mensajes:hover {
+    background: linear-gradient(
+        135deg,
+        #9333ea,
+        #c084fc
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px #7c3aed66;
+}
+
+.nexus-admin-btn:hover {
+    background: #7040cb;
+}
+
+/* ==========================================
+   CARRITO
+========================================== */
+
+#carritoPanel.nexus-checkout {
+    width: min(460px, 100%);
+    max-width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px;
+    background: #111020;
+    color: #f5f3ff;
+    box-sizing: border-box;
+    z-index: 1001;
+}
+
+.nexus-checkout .encabezado-carrito {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #393354;
+}
+
+.nexus-checkout .encabezado-carrito h2 {
+    margin: 0;
+    color: #c4b5fd;
+    font-size: 23px;
+}
+
+.nexus-checkout .cerrar-checkout {
+    background: #302744;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 9px 13px;
+    cursor: pointer;
+}
+
+.nexus-checkout .checkout-etapa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 22px 0 12px;
+    color: #c4b5fd;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.nexus-checkout .checkout-numero {
+    width: 27px;
+    height: 27px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #8b5cf6;
+    color: white;
+    border-radius: 50%;
+    font-size: 13px;
+}
+
+.nexus-checkout .checkout-caja {
+    background: #1d1a30;
+    border: 1px solid #40365e;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 15px;
+}
+
+.nexus-checkout #listaCarrito {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.nexus-checkout .item-carrito {
+    border-bottom: 1px solid #40365e;
+    padding: 13px 0;
+}
+
+.nexus-checkout .item-carrito h4 {
+    color: #f5f3ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nexus-checkout .item-carrito p {
+    color: #c9c3d7;
+}
+
+.nexus-checkout .item-carrito button {
+    background: #3d315c;
+    border: 1px solid #58467f;
+    border-radius: 7px;
+    padding: 7px 11px;
+    color: white;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.nexus-checkout .checkout-total {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 0;
+    padding-top: 15px;
+    border-top: 1px solid #40365e;
+    font-size: 18px;
+}
+
+.nexus-checkout #total {
+    color: #c4b5fd;
+    font-weight: bold;
+}
+
+/* ==========================================
+   MÉTODOS DE PAGO
+========================================== */
+
+.checkout-metodos {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.checkout-metodo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #46395e;
+    border-radius: 12px;
+    background: #201b34;
+    cursor: pointer;
+}
+
+.checkout-metodo:hover {
+    border-color: #a78bfa;
+    background: #2b2246;
+}
+
+.checkout-metodo:has(input:checked) {
+    border-color: #a78bfa;
+    background: #30244f;
+}
+
+.checkout-metodo input {
+    accent-color: #a78bfa;
+    width: 17px;
+    height: 17px;
+}
+
+.checkout-metodo .metodo-icono {
+    font-size: 24px;
+}
+
+.checkout-metodo .metodo-texto {
+    flex: 1;
+}
+
+.checkout-metodo strong {
+    display: block;
+    color: #f5f3ff;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.checkout-metodo small {
+    display: block;
+    color: #aaa4bd;
+    font-size: 12px;
+}
+
+.checkout-aviso {
+    background: #28203f;
+    border-left: 3px solid #a78bfa;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 15px;
+    font-size: 12px;
+    color: #d8d1e8;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   FORMULARIOS DE PAGO SIMULADO
+========================================== */
+
+.pago-demo {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid #66518e;
+    border-radius: 14px;
+    background: #191529;
+}
+
+.pago-demo.activo {
+    display: block;
+}
+
+.pago-demo h3 {
+    color: #c4b5fd;
+    margin: 0 0 12px;
+    font-size: 16px;
+}
+
+.pago-demo label:not(.demo-check) {
+    display: block;
+    color: #e4d9ff;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 12px 0 6px;
+}
+
+.pago-demo input:not([type=checkbox]),
+.pago-demo select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #574777;
+    border-radius: 9px;
+    background: #100e1e;
+    color: white;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+.pago-demo input:focus,
+.pago-demo select:focus {
+    outline: 2px solid #8b5cf6;
+}
+
+.demo-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.demo-nota {
+    background: #30244f;
+    color: #ddd6fe;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.demo-dato {
+    padding: 10px;
+    background: #28203f;
+    border-radius: 8px;
+    color: #eee;
+    margin: 8px 0;
+    overflow-wrap: anywhere;
+}
+
+.demo-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 14px 0;
+    color: #eee;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.demo-check input {
+    margin-top: 3px;
+    accent-color: #a78bfa;
+}
+
+/* ==========================================
+   BOTÓN DE COMPRA
+========================================== */
+
+#comprar.nexus-comprar {
+    display: block;
+    width: 100%;
+    background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7
+    );
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#comprar.nexus-comprar:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.checkout-seguridad {
+    text-align: center;
+    color: #aaa4bd;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 14px 0;
+}
+
+/* ==========================================
+   VENTANA DE CONFIRMACIÓN
+========================================== */
+
+.nexus-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    background: rgba(4, 3, 13, .82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.nexus-modal.visible {
+    display: flex;
+}
+
+.nexus-modal-contenido {
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #1c1830;
+    border: 1px solid #66518e;
+    border-radius: 20px;
+    padding: 28px;
+    text-align: center;
+    color: white;
+    box-sizing: border-box;
+}
+
+.nexus-modal-icono {
+    font-size: 50px;
+}
+
+.nexus-modal-contenido h2 {
+    color: #c4b5fd;
+}
+
+.nexus-modal-contenido p {
+    color: #c9c3d7;
+    font-size: 14px;
+}
+
+.nexus-modal-resumen {
+    background: #29213f;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 18px 0;
+    text-align: left;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.nexus-modal-acciones {
+    display: flex;
+    gap: 12px;
+}
+
+.nexus-modal-acciones button {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: #8b5cf6;
+}
+
+.nexus-modal-acciones .secundario {
+    background: #49395e;
+}
+
+/* ==========================================
+   DISEÑO RESPONSIVO
+========================================== */
+
+@media(max-width:800px) {
+    .nexus-admin-bar {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media(max-width:768px) {
+    .nexus-boton-mensajes {
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+}
+
+@media(max-width:480px) {
+    #carritoPanel.nexus-checkout {
+        padding: 18px;
+    }
+
+    .nexus-modal-contenido {
+        padding: 20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ==========================================
+     ENCABEZADO PRINCIPAL
+========================================== -->
+
+<header>
+
+    <div class="logo">NEXUS ✦</div>
+
+    <nav>
+
+        <a href="#inicio">Inicio</a>
+
+        <a href="#catalogo">Productos</a>
+
+        <a href="#nosotros">Nosotros</a>
+
+        <a href="{% url 'resenas' %}">
+            ⭐ Reseñas
+        </a>
+
+        <!-- MENÚ DEL CLIENTE -->
+
+        {% if user.is_authenticated and not user.is_staff %}
+
+            <a href="{% url 'mis_pedidos' %}">
+                📦 Mis pedidos
+            </a>
+
+            <a href="{% url 'chat_cliente' %}"
+               class="nexus-boton-mensajes">
+                💬 Mensajes
+            </a>
+
+        {% elif not user.is_authenticated %}
+
+            <a href="{% url 'login' %}?next={% url 'chat_cliente' %}"
+               class="nexus-boton-mensajes">
+                💬 Contactar soporte
+            </a>
+
+        {% endif %}
+
+        <!-- MENÚ DEL ADMINISTRADOR -->
+
+        {% if user.is_authenticated and user.is_staff %}
+
+            <a href="{% url 'panel_admin' %}"
+               class="nexus-acceso-admin">
+                🛡️ Administración
+            </a>
+
+            <a href="{% url 'chat_admin' %}"
+               class="nexus-boton-mensajes">
+                📩 Mensajes de clientes
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+    <!-- CUENTA DEL USUARIO -->
+
+    <div class="nexus-acciones-cuenta">
+
+        {% if user.is_authenticated %}
+
+            <span class="nexus-usuario">
+                👤 Hola, {{ user.username }}
+            </span>
+
+            <form
+                action="{% url 'logout' %}"
+                method="POST"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="nexus-cerrar-sesion"
+                >
+                    Cerrar sesión
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <a href="{% url 'login' %}">
+                Iniciar sesión
+            </a>
+
+            <a href="{% url 'registro' %}">
+                Registrarse
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    <!-- CARRITO -->
+
+    <button
+        type="button"
+        onclick="abrirCarrito()"
+    >
+        🛒 Carrito (<span id="contador">0</span>)
+    </button>
+
+</header>
+
+
+<!-- ==========================================
+     BARRA DEL ADMINISTRADOR
+========================================== -->
+
+{% if user.is_authenticated and user.is_staff %}
+
+<section class="nexus-admin-bar">
+
+    <p>🛡️ Modo administrador</p>
+
+    <a
+        href="{% url 'panel_admin' %}"
+        class="nexus-admin-btn"
+    >
+        📊 Panel de control
+    </a>
+
+    <a
+        href="{% url 'administrar_productos' %}"
+        class="nexus-admin-btn secundario"
+    >
+        📦 Inventario
+    </a>
+
+    <a
+        href="{% url 'agregar_producto' %}"
+        class="nexus-admin-btn secundario"
+    >
+        ➕ Agregar producto
+    </a>
+
+    <!-- NUEVO BOTÓN DE MENSAJES -->
+
+    <a
+        href="{% url 'chat_admin' %}"
+        class="nexus-admin-btn secundario"
+    >
+        📩 Mensajes de clientes
+    </a>
+
+</section>
+
+{% endif %}
+
+
+<!-- ==========================================
+     INICIO
+========================================== -->
+
+<section class="inicio" id="inicio">
+
+    <h1>
+        BIENVENIDO A <span>NEXUS</span>
+    </h1>
+
+    <h2>
+        Tu universo gaming comienza aquí
+    </h2>
+
+    <p>
+        Videojuegos, consolas y accesorios para
+        llevar tu experiencia al siguiente nivel.
+    </p>
+
+    <a class="boton" href="#catalogo">
+        Explorar productos
+    </a>
+
+</section>
+
+
+<!-- ==========================================
+     CATÁLOGO DE PRODUCTOS
+========================================== -->
+
+<section class="catalogo" id="catalogo">
+
+    <h2>Nuestros productos</h2>
+
+    <input
+        id="buscador"
+        type="search"
+        placeholder="Buscar productos..."
+        oninput="mostrarProductos()"
+    >
+
+    <div class="categorias">
+
+        <button onclick="filtrar('Todos')">
+            Todos
+        </button>
+
+        <button onclick="filtrar('Juegos')">
+            Juegos
+        </button>
+
+        <button onclick="filtrar('Consolas')">
+            Consolas
+        </button>
+
+        <button onclick="filtrar('Audífonos')">
+            Audífonos
+        </button>
+
+        <button onclick="filtrar('Teclados y Mouse')">
+            Teclados y Mouse
+        </button>
+
+    </div>
+
+    <div id="productos" class="productos"></div>
+
+</section>
+
+
+<!-- ==========================================
+     NOSOTROS
+========================================== -->
+
+<section class="nosotros" id="nosotros">
+
+    <h2>Sobre NEXUS</h2>
+
+    <p>
+        NEXUS nació de la pasión por los videojuegos
+        y la tecnología. Nuestro objetivo es ofrecer
+        un espacio digital donde los jugadores puedan
+        encontrar sus videojuegos, consolas y accesorios
+        favoritos en un solo lugar.
+    </p>
+
+    <h3>Nuestra misión</h3>
+
+    <p>
+        Brindar una experiencia de compra moderna,
+        accesible y sencilla para toda la comunidad gamer.
+    </p>
+
+    <h3>Nuestra visión</h3>
+
+    <p>
+        Convertirnos en una tienda reconocida por su
+        innovación, variedad y compromiso con los jugadores.
+    </p>
+
+    <h3>Nuestros valores</h3>
+
+    <p>
+        Pasión, innovación, confianza, calidad
+        y compromiso con nuestros clientes.
+    </p>
+
+</section>
+
+
+<!-- ==========================================
+     FONDO DEL CARRITO
+========================================== -->
+
+<div
+    id="fondoCarrito"
+    class="fondo-carrito"
+    onclick="cerrarCarrito()"
+></div>
+
+
+<!-- ==========================================
+     CARRITO DE COMPRAS
+========================================== -->
+
+<aside
+    id="carritoPanel"
+    class="carrito-panel nexus-checkout"
+>
+
+    <div class="encabezado-carrito">
+
+        <h2>🛒 Finalizar compra</h2>
+
+        <button
+            type="button"
+            class="cerrar-checkout"
+            onclick="cerrarCarrito()"
+        >
+            ✕
+        </button>
+
+    </div>
+
+    <!-- PASO 1 -->
+
+    <div class="checkout-etapa">
+        <span class="checkout-numero">1</span>
+        Resumen de tu pedido
+    </div>
+
+    <div class="checkout-caja">
+
+        <div id="listaCarrito"></div>
+
+        <h3 class="checkout-total">
+            <span>Total a pagar</span>
+            <span id="total">$0.00</span>
+        </h3>
+
+    </div>
+
+    <!-- PASO 2 -->
+
+    <div class="checkout-etapa">
+        <span class="checkout-numero">2</span>
+        Método de pago
+    </div>
+
+    <div class="checkout-caja">
+
+        <div class="checkout-metodos">
+
+            <!-- TARJETA -->
+
+            <label class="checkout-metodo">
+
+                <input
+                    type="radio"
+                    name="metodoPago"
+                    value="tarjeta"
+                    checked
+                >
+
+                <span class="metodo-icono">💳</span>
+
+                <span class="metodo-texto">
+
+                    <strong>
+                        Tarjeta de crédito o débito
+                    </strong>
+
+                    <small>
+                        Tarjeta ficticia de prueba
+                    </small>
+
+                </span>
+
+            </label>
+
+            <!-- OXXO -->
+
+            <label class="checkout-metodo">
+
+                <input
+                    type="radio"
+                    name="metodoPago"
+                    value="oxxo"
+                >
+
+                <span class="metodo-icono">🏪</span>
+
+                <span class="metodo-texto">
+
+                    <strong>Pago en OXXO</strong>
+
+                    <small>
+                        Referencia simulada
+                    </small>
+
+                </span>
+
+            </label>
+
+            <!-- TRANSFERENCIA -->
+
+            <label class="checkout-metodo">
+
+                <input
+                    type="radio"
+                    name="metodoPago"
+                    value="transferencia"
+                >
+
+                <span class="metodo-icono">🏦</span>
+
+                <span class="metodo-texto">
+
+                    <strong>
+                        Transferencia bancaria
+                    </strong>
+
+                    <small>
+                        Transferencia ficticia
+                    </small>
+
+                </span>
+
+            </label>
+
+        </div>
+
+        <div
+            class="checkout-aviso"
+            id="avisoMetodoPago"
+        >
+            🧪 Simulación escolar.
+            No uses información bancaria real.
+        </div>
+
+        <!-- ==================================
+             FORMULARIO DE TARJETA
+        ================================== -->
+
+        <div
+            id="formularioTarjeta"
+            class="pago-demo activo"
+        >
+
+            <h3>💳 Tarjeta de prueba</h3>
+
+            <div class="demo-nota">
+
+                Utiliza exclusivamente estos datos
+                ficticios para tu proyecto:
+
+                <strong>
+                    4242 4242 4242 4242
+                </strong>
+
+                Vencimiento:
+                <strong>12/30</strong>
+
+                CVV ficticio:
+                <strong>123</strong>
+
+                Nunca introduzcas datos reales.
+
+            </div>
+
+            <label for="bancoTarjeta">
+                Banco ficticio
+            </label>
+
+            <select id="bancoTarjeta">
+
+                <option value="">
+                    Selecciona un banco de prueba
+                </option>
+
+                <option value="Banco Demo NEXUS">
+                    Banco Demo NEXUS
+                </option>
+
+                <option value="Banco Gamer Ficticio">
+                    Banco Gamer Ficticio
+                </option>
+
+            </select>
+
+            <label for="titularTarjeta">
+                Nombre ficticio del titular
+            </label>
+
+            <input
+                id="titularTarjeta"
+                type="text"
+                maxlength="60"
+                placeholder="CLIENTE DEMO"
+                autocomplete="off"
+            >
+
+            <label for="numeroTarjeta">
+                Número de tarjeta de prueba
+            </label>
+
+            <input
+                id="numeroTarjeta"
+                type="text"
+                inputmode="numeric"
+                maxlength="19"
+                placeholder="4242 4242 4242 4242"
+                autocomplete="off"
+            >
+
+            <div class="demo-columnas">
+
+                <div>
+
+                    <label for="fechaTarjeta">
+                        Vencimiento
+                    </label>
+
+                    <input
+                        id="fechaTarjeta"
+                        type="text"
+                        maxlength="5"
+                        placeholder="12/30"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+                <div>
+
+                    <label for="cvvTarjeta">
+                        CVV ficticio
+                    </label>
+
+                    <input
+                        id="cvvTarjeta"
+                        type="text"
+                        inputmode="numeric"
+                        maxlength="3"
+                        placeholder="123"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ==================================
+             TRANSFERENCIA SIMULADA
+        ================================== -->
+
+        <div
+            id="formularioTransferencia"
+            class="pago-demo"
+        >
+
+            <h3>🏦 Transferencia simulada</h3>
+
+            <div class="demo-nota">
+                No transfieras dinero.
+                Esta operación es solamente
+                una demostración escolar.
+            </div>
+
+            <div class="demo-dato">
+
+                <strong>Banco receptor:</strong>
+                Banco Demo NEXUS
+
+            </div>
+
+            <div class="demo-dato">
+
+                <strong>Referencia:</strong>
+                NEXUS-DEMO-001
+
+            </div>
+
+            <label for="bancoTransferencia">
+                Banco ficticio de origen
+            </label>
+
+            <select id="bancoTransferencia">
+
+                <option value="">
+                    Selecciona un banco de prueba
+                </option>
+
+                <option value="Banco Demo NEXUS">
+                    Banco Demo NEXUS
+                </option>
+
+                <option value="Banco Gamer Ficticio">
+                    Banco Gamer Ficticio
+                </option>
+
+            </select>
+
+            <label for="referenciaTransferencia">
+                Referencia ficticia
+            </label>
+
+            <input
+                id="referenciaTransferencia"
+                type="text"
+                value="NEXUS-DEMO-001"
+                readonly
+            >
+
+            <label class="demo-check">
+
+                <input
+                    type="checkbox"
+                    id="confirmarTransferencia"
+                >
+
+                Confirmo que deseo simular esta
+                transferencia sin mover dinero.
+
+            </label>
+
+        </div>
+
+        <!-- ==================================
+             OXXO SIMULADO
+        ================================== -->
+
+        <div
+            id="formularioOxxo"
+            class="pago-demo"
+        >
+
+            <h3>🏪 Pago OXXO simulado</h3>
+
+            <div class="demo-nota">
+
+                Esta referencia es ficticia.
+                No es válida para pagar
+                en ninguna tienda.
+
+            </div>
+
+            <div class="demo-dato">
+
+                <strong>Referencia:</strong>
+                NEXUS-DEMO-OXXO-001
+
+            </div>
+
+            <label class="demo-check">
+
+                <input
+                    type="checkbox"
+                    id="confirmarOxxo"
+                >
+
+                Confirmo que deseo simular
+                el pago en OXXO.
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <!-- BOTÓN DE COMPRA -->
+
+    <button
+        id="comprar"
+        class="nexus-comprar"
+        type="button"
+        onclick="finalizarCompra()"
+    >
+        🎮 Revisar y confirmar pedido
+    </button>
+
+    <p class="checkout-seguridad">
+
+        🔒 Tu pedido estará asociado a tu cuenta.
+        Esta demostración no realiza cobros
+        ni almacena datos bancarios.
+
+    </p>
+
+</aside>
+
+
+<!-- ==========================================
+     MODAL DE CONFIRMACIÓN
+========================================== -->
+
+<div
+    id="modalConfirmarCompra"
+    class="nexus-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tituloModalCompra"
+>
+
+    <div class="nexus-modal-contenido">
+
+        <div class="nexus-modal-icono">
+            🎮
+        </div>
+
+        <h2 id="tituloModalCompra">
+            Confirmar pedido de prueba
+        </h2>
+
+        <p>
+            Revisa la información antes de registrar
+            tu pedido en NEXUS.
+        </p>
+
+        <div
+            id="resumenModalCompra"
+            class="nexus-modal-resumen"
+        ></div>
+
+        <p>
+            Simulación escolar.
+            No se realizará ningún cargo bancario.
+        </p>
+
+        <div class="nexus-modal-acciones">
+
+            <button
+                type="button"
+                class="secundario"
+                id="cancelarModalCompra"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="aceptarModalCompra"
+            >
+                Confirmar pedido
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     PIE DE PÁGINA
+========================================== -->
+
+<footer>
+
+    <h2>NEXUS ✦</h2>
+
+    <p>
+        Tu mundo gamer en un solo lugar.
+    </p>
+
+    <p>
+        © 2026 NEXUS -
+        Todos los derechos reservados.
+    </p>
+
+</footer>
+
+
+<!-- ==========================================
+     PRODUCTOS DE DJANGO
+========================================== -->
+
+<script
+    id="productos-django"
+    type="application/json"
+>
+[
+{% for producto in productos_db %}
+{
+    "id": {{ producto.id }},
+    "nombre": "{{ producto.nombre|escapejs }}",
+    "categoria": "{{ producto.get_categoria_display|escapejs }}",
+    "precio": {{ producto.precio|stringformat:".2f" }},
+    "imagen": "{% if producto.imagen %}{{ producto.imagen.url|escapejs }}{% endif %}",
+    "existencias": {{ producto.existencias }}
+}{% if not forloop.last %},{% endif %}
+{% endfor %}
+]
+</script>
+
+
+<!-- ==========================================
+     JAVASCRIPT PRINCIPAL
+========================================== -->
+
+<script src="{% static 'tienda/js/scripts.js' %}?v=6"></script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }} | NEXUS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0b17;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #17172a;
+            padding: 25px 7%;
+            border-bottom: 2px solid #8b5cf6;
+        }
+
+        .logo {
+            color: #b794ff;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .contenedor {
+            max-width: 750px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .tarjeta {
+            background: #1b1b32;
+            border: 1px solid #383052;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .subtitulo {
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .campo {
+            margin-bottom: 22px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: bold;
+            color: #ddd;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px;
+            background: #10101e;
+            border: 1px solid #51416f;
+            border-radius: 9px;
+            color: white;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            width: 100%;
+        }
+
+        .campo-imagen {
+            margin: 15px 0;
+        }
+
+        .campo-imagen img {
+            max-width: 180px;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #292943;
+            padding: 10px;
+        }
+
+        .campo-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .campo-checkbox label {
+            margin: 0;
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            accent-color: #8b5cf6;
+        }
+
+        .error {
+            color: #ff8c8c;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .ayuda {
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .boton {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 9px;
+            font-weight: bold;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .guardar {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .guardar:hover {
+            background: #a78bfa;
+        }
+
+        .cancelar {
+            background: #34344e;
+            color: white;
+        }
+
+        .cancelar:hover {
+            background: #454563;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .tarjeta {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">🎮 NEXUS ADMIN</div>
+    </header>
+
+    <main class="contenedor">
+
+        <div class="tarjeta">
+
+            <h1>📦 {{ titulo }}</h1>
+
+            <p class="subtitulo">
+                Completa la información del producto
+                para actualizar el catálogo de NEXUS.
+            </p>
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                {% if formulario.non_field_errors %}
+                    <div class="error">
+                        {{ formulario.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- NOMBRE -->
+                <div class="campo">
+                    <label for="{{ formulario.nombre.id_for_label }}">
+                        Nombre del producto
+                    </label>
+
+                    {{ formulario.nombre }}
+
+                    <div class="error">
+                        {{ formulario.nombre.errors }}
+                    </div>
+                </div>
+
+                <!-- CATEGORÍA -->
+                <div class="campo">
+                    <label for="{{ formulario.categoria.id_for_label }}">
+                        Categoría
+                    </label>
+
+                    {{ formulario.categoria }}
+
+                    <div class="error">
+                        {{ formulario.categoria.errors }}
+                    </div>
+                </div>
+
+                <!-- DESCRIPCIÓN -->
+                <div class="campo">
+                    <label for="{{ formulario.descripcion.id_for_label }}">
+                        Descripción
+                    </label>
+
+                    {{ formulario.descripcion }}
+
+                    <div class="error">
+                        {{ formulario.descripcion.errors }}
+                    </div>
+                </div>
+
+                <!-- PRECIO -->
+                <div class="campo">
+                    <label for="{{ formulario.precio.id_for_label }}">
+                        Precio (MXN)
+                    </label>
+
+                    {{ formulario.precio }}
+
+                    <div class="error">
+                        {{ formulario.precio.errors }}
+                    </div>
+                </div>
+
+                <!-- IMAGEN -->
+                <div class="campo">
+                    <label for="{{ formulario.imagen.id_for_label }}">
+                        Imagen del producto
+                    </label>
+
+                    {% if producto and producto.imagen %}
+                        <div class="campo-imagen">
+                            <p>Imagen actual:</p>
+                            <img
+                                src="{{ producto.imagen.url }}"
+                                alt="{{ producto.nombre }}">
+                        </div>
+                    {% endif %}
+
+                    {{ formulario.imagen }}
+
+                    <div class="error">
+                        {{ formulario.imagen.errors }}
+                    </div>
+
+                    <p class="ayuda">
+                        Puedes subir un
+                <!-- EXISTENCIAS -->
+                <div class="campo">
+                    <label for="{{ formulario.existencias.id_for_label }}">
+                        Existencias
+                    </label>
+
+                    {{ formulario.existencias }}
+
+                    <div class="error">
+                        {{ formulario.existencias.errors }}
+                    </div>
+                </div>
+
+                <!-- DISPONIBILIDAD -->
+                <div class="campo">
+                    <div class="campo-checkbox">
+                        {{ formulario.disponible }}
+
+                        <label for="{{ formulario.disponible.id_for_label }}">
+                            Producto disponible en la tienda
+                        </label>
+                    </div>
+
+                    <div class="error">
+                        {{ formulario.disponible.errors }}
+                    </div>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="acciones">
+
+                    <button type="submit" class="boton guardar">
+                        💾 Guardar producto
+                    </button>
+
+                    <a href="{% url 'administrar_productos' %}"
+                       class="boton cancelar">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
+a fotografía del producto.
+                    </p>
+                </div>

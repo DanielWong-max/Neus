@@ -1,0 +1,301 @@
+
+
+    
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #090b17;
+    color: white;
+}
+
+header {
+    background: #15152b;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #a78bfa;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #a78bfa;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    background: #6939c6;
+    color: white;
+}
+
+button:hover {
+    background: #8855ed;
+}
+
+.inicio {
+    text-align: center;
+    padding: 110px 20px;
+    background: linear-gradient(135deg, #10152d, #361b60);
+}
+
+.inicio h1 {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+.inicio h1 span {
+    color: #ad8cff;
+}
+
+.inicio p {
+    color: #d0c9e5;
+    font-size: 18px;
+}
+
+.boton {
+    display: inline-block;
+    margin-top: 20px;
+    background: #6939c6;
+    color: white;
+    padding: 15px 25px;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+section {
+    scroll-margin-top: 100px;
+}
+
+.catalogo {
+    padding: 60px 7%;
+    text-align: center;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+#buscador {
+    padding: 15px;
+    width: 100%;
+    max-width: 400px;
+    background: #1c2037;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.categorias {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 35px;
+}
+
+.categorias button {
+    background: #292647;
+}
+
+.categorias button.activo {
+    background: #8855ed;
+}
+
+.productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 25px;
+}
+
+.producto {
+    background: #191d32;
+    border: 1px solid #373955;
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: left;
+}
+
+.producto:hover {
+    border-color: #9d6bff;
+}
+
+.imagen {
+    background: linear-gradient(135deg, #242c51, #4a286d);
+    height: 175px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 75px;
+}
+
+.info {
+    padding: 20px;
+}
+
+.info small {
+    color: #bba0ff;
+}
+
+.info h3 {
+    min-height: 45px;
+}
+
+.precio {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.info button {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.nosotros {
+    background: #15182c;
+    padding: 70px 10%;
+    text-align: center;
+}
+
+.nosotros p {
+    max-width: 800px;
+    margin: 20px auto;
+    line-height: 1.8;
+    color: #c8c8dd;
+}
+
+.nosotros h3 {
+    color: #bba0ff;
+}
+
+footer {
+    background: #080910;
+    text-align: center;
+    padding: 35px;
+    color: #aaaac0;
+}
+
+.fondo-carrito {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    z-index: 9;
+}
+
+.carrito-panel {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    width: min(420px, 100%);
+    height: 100vh;
+    background: #191c32;
+    padding: 25px;
+    z-index: 10;
+    overflow-y: auto;
+    transition: right 0.3s;
+}
+
+.carrito-panel.abierto {
+    right: 0;
+}
+
+.encabezado-carrito {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-carrito {
+    border-bottom: 1px solid #45455e;
+    padding: 15px 0;
+}
+
+.item-carrito button {
+    margin: 5px;
+    padding: 8px 12px;
+}
+
+.total {
+    font-size: 24px;
+    margin-top: 25px;
+}
+
+#comprar {
+    width: 100%;
+    margin-top: 15px;
+}
+
+@media(max-width: 600px) {
+    .inicio h1 {
+        font-size: 36px;
+    }
+
+    header {
+        justify-content: center;
+    }
+
+    .catalogo {
+        padding: 45px 5%;
+    }
+}
+
+
+/* BOTÓN VER DETALLES */
+
+.boton-detalles {
+    background: transparent;
+    color: #b794ff;
+    border: 2px solid #8b5cf6;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.boton-detalles:hover {
+    background: #8b5cf6;
+    color: white;
+}
+
+.producto .info button:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+

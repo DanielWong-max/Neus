@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseñas | NEXUS</title>
+
+    <style>
+        body {
+            background: #0b1020;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #a78bfa;
+            text-align: center;
+        }
+
+        .contenedor {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .formulario, .resena {
+            background: #1e1b35;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #7c3aed;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        a {
+            color: #a78bfa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor">
+
+        <h1>🎮 Reseñas NEXUS</h1>
+
+        <a href="{% url 'inicio' %}">← Volver a la tienda</a>
+
+        <div class="formulario">
+            <h2>Publicar una reseña</h2>
+
+            <form method="POST" action="{% url 'agregar_resena' %}">
+                {% csrf_token %}
+
+                <input type="text"
+                       name="videojuego"
+                       placeholder="Nombre del videojuego"
+                       maxlength="150"
+                       required>
+
+                <select name="calificacion" required>
+                    <option value="">Selecciona una calificación</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                </select>
+
+                <textarea name="comentario"
+                          placeholder="Escribe tu opinión"
+                          required></textarea>
+
+                <button type="submit">Publicar reseña</button>
+            </form>
+        </div>
+
+        <h2>Opiniones de jugadores</h2>
+
+        {% for resena in resenas %}
+            <div class="resena">
+                <h3>{{ resena.videojuego }}</h3>
+                <p>Usuario: {{ resena.usuario.username }}</p>
+                <p>Calificación: {{ resena.calificacion }}/5 ⭐</p>
+                <p>{{ resena.comentario }}</p>
+                <small>{{ resena.fecha }}</small>
+                {% if resena.usuario == request.user or request.user.is_staff %}
+
+                <a href="{% url 'modificar_resena' resena.id %}"
+   style="display:inline-block;
+          background:#8b70ef;
+          color:white;
+          padding:10px 15px;
+          border-radius:8px;
+          text-decoration:none;
+          margin:10px 0;">
+    ✏️ Modificar reseña
+</a>
+
+<form action="{% url 'eliminar_resena' resena.id %}"
+      method="POST"
+      onsubmit="return confirm('¿Seguro que deseas eliminar esta reseña?');">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        🗑️ Eliminar reseña
+    </button>
+
+</form>
+
+{% endif %}
+            </div>
+        {% empty %}
+            <p>Todavía no hay reseñas. ¡Publica la primera!</p>
+        {% endfor %}
+
+    </div>
+</body>
+</html>

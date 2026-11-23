@@ -1,0 +1,666 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ producto.nombre }} | NEXUS</title>
+
+    <link rel="stylesheet"
+          href="{% static 'tienda/css/styles.css' %}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0b17;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .detalle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: #151525;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .detalle-logo {
+            color: #a78bfa;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .detalle-nav {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .detalle-nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .detalle-nav a:hover {
+            color: #a78bfa;
+        }
+
+        .detalle-contenedor {
+            max-width: 1150px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .volver {
+            display: inline-block;
+            color: #b794ff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .detalle-producto {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            background: #17172a;
+            border: 1px solid #30264b;
+            border-radius: 20px;
+            padding: 35px;
+        }
+
+        .detalle-imagen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            background: #22223b;
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .detalle-imagen img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .sin-imagen {
+            font-size: 110px;
+        }
+
+        .detalle-categoria {
+            color: #b794ff;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detalle-info h1 {
+            font-size: 36px;
+            margin: 15px 0;
+        }
+
+        .detalle-precio {
+            font-size: 36px;
+            color: #b794ff;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .detalle-descripcion {
+            color: #d1d1df;
+            line-height: 1.8;
+        }
+
+        .disponible {
+            color: #69e6a4;
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        .agotado {
+            color: #ff7777;
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        .detalle-boton {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .detalle-boton:hover {
+            background: #a78bfa;
+        }
+
+        .detalle-boton:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .detalle-nota {
+            color: #aaa;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        /* RESEÑAS */
+
+        .seccion-resenas {
+            margin-top: 45px;
+            padding: 35px;
+            background: #17172a;
+            border: 1px solid #30264b;
+            border-radius: 20px;
+        }
+
+        .seccion-resenas h2 {
+            color: #fff;
+            margin-top: 0;
+        }
+
+        .formulario-resena {
+            background: #22223b;
+            padding: 25px;
+            border-radius: 14px;
+            margin: 25px 0;
+        }
+
+        .formulario-resena label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
+        }
+
+        .formulario-resena select,
+        .formulario-resena textarea {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #51416f;
+            border-radius: 8px;
+            background: #10101e;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .formulario-resena textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .resena-tarjeta {
+            background: #22223b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .resena-encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .resena-usuario {
+            font-weight: bold;
+        }
+
+        .resena-fecha {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        .resena-estrellas {
+            color: #ffc857;
+            font-size: 23px;
+            margin: 12px 0;
+            letter-spacing: 3px;
+        }
+
+        .resena-comentario {
+            color: #ddd;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .resena-vacia {
+            color: #aaa;
+            padding: 20px 0;
+        }
+
+        .resena-enlace {
+            color: #b794ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .resena-acciones {
+            margin-top: 15px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .resena-acciones button {
+            background: #a63249;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .detalle-footer {
+            text-align: center;
+            padding: 30px;
+            color: #aaa;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 750px) {
+            .detalle-producto {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .detalle-contenedor {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .detalle-imagen {
+                min-height: 250px;
+            }
+
+            .detalle-info h1 {
+                font-size: 28px;
+            }
+
+            .seccion-resenas {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <header class="detalle-header">
+        <div class="detalle-logo">NEXUS ✦</div>
+
+        <nav class="detalle-nav">
+            <a href="{% url 'inicio' %}">Inicio</a>
+            <a href="{% url 'inicio' %}#catalogo">Productos</a>
+            <a href="{% url 'resenas' %}">⭐ Reseñas</a>
+        </nav>
+    </header>
+
+    <main class="detalle-contenedor">
+
+        <a href="{% url 'inicio' %}#catalogo"
+           class="volver">
+            ← Volver al catálogo
+        </a>
+
+        <!-- DETALLES DEL PRODUCTO -->
+        <section class="detalle-producto">
+
+            <div class="detalle-imagen">
+                {% if producto.imagen %}
+                    <img
+                        src="{{ producto.imagen.url }}"
+                        alt="{{ producto.nombre }}"
+                    >
+                {% else %}
+                    <div class="sin-imagen">🎮</div>
+                {% endif %}
+            </div>
+
+            <div class="detalle-info">
+
+                <p class="detalle-categoria">
+                    {{ producto.get_categoria_display }}
+                </p>
+
+                <h1>{{ producto.nombre }}</h1>
+
+                <p class="detalle-precio">
+                    ${{ producto.precio }} MXN
+                </p>
+
+                <h3>Descripción</h3>
+
+                <p class="detalle-descripcion">
+                    {{ producto.descripcion|linebreaksbr }}
+                </p>
+
+                {% if producto.existencias > 0 %}
+                    <p class="disponible">
+                        ✔ Disponible:
+                        {{ producto.existencias }} unidades
+                    </p>
+
+                    <button
+                        type="button"
+                        class="detalle-boton"
+                        onclick="agregarDesdeDetalle()">
+                        🛒 Agregar al carrito
+                    </button>
+                {% else %}
+                    <p class="agotado">
+                        ✕ Producto agotado
+                    </p>
+
+                    <button
+                        type="button"
+                        class="detalle-boton"
+                        disabled>
+                        Producto agotado
+                    </button>
+                {% endif %}
+
+                <p class="detalle-nota">
+                    Las compras son de demostración.
+                    No se realizan cargos reales.
+                </p>
+            </div>
+        </section>
+
+        <!-- RESEÑAS DEL PRODUCTO -->
+        <section class="seccion-resenas" id="resenas-producto">
+
+            <h2>⭐ Opiniones de los clientes</h2>
+
+            <p>
+                Reseñas de:
+                <strong>{{ producto.nombre }}</strong>
+            </p>
+
+            <!-- FORMULARIO -->
+            {% if user.is_authenticated %}
+
+                {% if not user.is_staff %}
+
+                    <form
+                        class="formulario-resena"
+                        method="POST"
+                        action="{% url 'agregar_resena_producto' producto.id %}">
+
+                        {% csrf_token %}
+
+                        <h3>Escribe tu reseña</h3>
+
+                        <label for="calificacion">
+                            Calificación
+                        </label>
+
+                        <select
+                            id="calificacion"
+                            name="calificacion"
+                            required>
+                            <option value="">
+                                Selecciona una calificación
+                            </option>
+                            <option value="5">⭐⭐⭐⭐⭐ - Excelente</option>
+                            <option value="4">⭐⭐⭐⭐ - Muy bueno</option>
+                            <option value="3">⭐⭐⭐ - Bueno</option>
+                            <option value="2">⭐⭐ - Regular</option>
+                            <option value="1">⭐ - Malo</option>
+                        </select>
+
+                        <label for="comentario">
+                            Tu opinión
+                        </label>
+
+                        <textarea
+                            id="comentario"
+                            name="comentario"
+                            maxlength="2000"
+                            placeholder="Cuéntanos qué te pareció este producto..."
+                            required></textarea>
+
+                        <button
+                            type="submit"
+                            class="detalle-boton">
+                            ⭐ Publicar reseña
+                        </button>
+                    </form>
+
+                {% else %}
+                    <p class="resena-vacia">
+                        Los administradores pueden consultar y
+                        moderar reseñas, pero no publicar opiniones.
+                    </p>
+                {% endif %}
+
+            {% else %}
+
+                <p class="resena-vacia">
+                    Para publicar una reseña,
+                    <a class="resena-enlace"
+                       href="{% url 'login' %}?next={{ request.path|urlencode }}">
+                        inicia sesión
+                    </a>
+                    o
+                    <a class="resena-enlace"
+                       href="{% url 'registro' %}">
+                        regístrate
+                    </a>.
+                </p>
+
+            {% endif %}
+
+            <!-- RESEÑAS PUBLICADAS -->
+            <h3>Reseñas publicadas</h3>
+
+            {% for resena in resenas_producto %}
+
+                <article class="resena-tarjeta">
+
+                    <div class="resena-encabezado">
+                        <span class="resena-usuario">
+                            👤 {{ resena.usuario.username }}
+                        </span>
+
+                        <span class="resena-fecha">
+                            {{ resena.fecha|date:"d/m/Y H:i" }}
+                        </span>
+                    </div>
+
+                    <div class="resena-estrellas"
+                         aria-label="{{ resena.calificacion }} de 5 estrellas">
+
+                        {% if resena.calificacion == 5 %}
+                            ★★★★★
+                        {% elif resena.calificacion == 4 %}
+                            ★★★★☆
+                        {% elif resena.calificacion == 3 %}
+                            ★★★☆☆
+                        {% elif resena.calificacion == 2 %}
+                            ★★☆☆☆
+                        {% elif resena.calificacion == 1 %}
+                            ★☆☆☆☆
+                        {% else %}
+                            Sin calificación
+                        {% endif %}
+                    </div>
+
+                    <p class="resena-comentario">
+                        {{ resena.comentario|linebreaksbr }}
+                    </p>
+
+                    <!-- ACCIONES -->
+                    {% if user.is_authenticated %}
+
+                        {% if user == resena.usuario and not user.is_staff %}
+                            <div class="resena-acciones">
+                                <a class="resena-enlace"
+                                   href="{% url 'modificar_resena' resena.id %}">
+                                    ✏️ Editar
+                                </a>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'eliminar_resena' resena.id %}">
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        onclick="return confirm('¿Eliminar esta reseña?')">
+                                        🗑️ Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        {% elif user.is_staff %}
+                            <div class="resena-acciones">
+                                <form
+                                    method="POST"
+                                    action="{% url 'eliminar_resena' resena.id %}">
+                                    {% csrf_token %}
+                                    <button
+                                        type="submit"
+                                        onclick="return confirm('¿Eliminar esta reseña?')">
+                                        🗑️ Moderar / Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
+
+                    {% endif %}
+
+                </article>
+
+            {% empty %}
+
+                <p class="resena-vacia">
+                    Todavía no hay reseñas de este producto.
+                    ¡Sé la primera persona en opinar!
+                </p>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="detalle-footer">
+        <h2>NEXUS ✦</h2>
+        <p>Tu universo gaming comienza aquí.</p>
+        <p>© 2026 NEXUS</p>
+    </footer>
+
+    <!-- DATOS DEL PRODUCTO DESDE DJANGO -->
+    {{ producto.id|json_script:"producto-id" }}
+    {{ producto.nombre|json_script:"producto-nombre" }}
+    {{ producto.get_categoria_display|json_script:"producto-categoria" }}
+    {{ producto.precio|stringformat:".2f"|json_script:"producto-precio" }}
+    {{ producto.existencias|json_script:"producto-existencias" }}
+
+    {% if producto.imagen %}
+        {{ producto.imagen.url|json_script:"producto-imagen" }}
+    {% else %}
+        {{ ""|json_script:"producto-imagen" }}
+    {% endif %}
+
+    <!-- JAVASCRIPT DEL CARRITO -->
+    <script>
+        function leerDato(id) {
+            return JSON.parse(
+                document.getElementById(id).textContent
+            );
+        }
+
+        function agregarDesdeDetalle() {
+            const producto = {
+                id: 1000000 + Number(
+                    leerDato("producto-id")
+                ),
+                nombre: leerDato("producto-nombre"),
+                categoria: leerDato("producto-categoria"),
+                precio: Number(
+                    leerDato("producto-precio")
+                ),
+                imagen: leerDato("producto-imagen") || "🎮",
+                existencias: Number(
+                    leerDato("producto-existencias")
+                ),
+                desdeDjango: true,
+                cantidad: 1
+            };
+
+            let carrito = [];
+
+            try {
+                carrito = JSON.parse(
+                    localStorage.getItem("nexusCarrito")
+                ) || [];
+            } catch (error) {
+                carrito = [];
+            }
+
+            if (!Array.isArray(carrito)) {
+                carrito = [];
+            }
+
+            const existente = carrito.find(
+                p => Number(p.id) === producto.id
+            );
+
+            const cantidadActual = existente
+                ? Number(existente.cantidad) || 0
+                : 0;
+
+            if (cantidadActual >= producto.existencias) {
+                alert(
+                    "No hay más unidades disponibles de este producto."
+                );
+                return;
+            }
+
+            if (existente) {
+                existente.cantidad = cantidadActual + 1;
+            } else {
+                carrito.push(producto);
+            }
+
+            localStorage.setItem(
+                "nexusCarrito",
+                JSON.stringify(carrito)
+            );
+
+            alert(
+                producto.nombre + " agregado al carrito 🛒"
+            );
+        }
+    </script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administrar productos | NEXUS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0b17;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #17172a;
+            padding: 25px 7%;
+            border-bottom: 2px solid #8b5cf6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #b794ff;
+        }
+
+        .volver {
+            color: #b794ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contenedor {
+            max-width: 1250px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitulo {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 9px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .boton-agregar {
+            background: #8b5cf6;
+        }
+
+        .boton-agregar:hover {
+            background: #a78bfa;
+        }
+
+        .boton-editar {
+            background: #5140a0;
+        }
+
+        .boton-editar:hover {
+            background: #6c57c7;
+        }
+
+        .boton-eliminar {
+            background: #b73550;
+        }
+
+        .boton-eliminar:hover {
+            background: #d34864;
+        }
+
+        /* ESTADÍSTICAS */
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .estadistica {
+            background: #1b1b32;
+            border: 1px solid #383052;
+            border-radius: 14px;
+            padding: 23px;
+            text-align: center;
+        }
+
+        .estadistica h3 {
+            color: #ccc;
+            font-size: 15px;
+            margin-top: 0;
+        }
+
+        .numero {
+            font-size: 36px;
+            font-weight: bold;
+            color: #b794ff;
+            margin: 12px 0;
+        }
+
+        .numero.alerta {
+            color: #ffb86b;
+        }
+
+        .numero.agotado {
+            color: #ff7777;
+        }
+
+        /* FILTROS */
+
+        .filtros {
+            background: #1b1b32;
+            border: 1px solid #383052;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        .filtros h2 {
+            margin-top: 0;
+            font-size: 19px;
+        }
+
+        .filtros-contenido {
+            display: grid;
+            grid-template-columns:
+                2fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .campo {
+            width: 100%;
+            padding: 13px;
+            border-radius: 9px;
+            background: #10101e;
+            color: white;
+            border: 1px solid #51416f;
+            font-size: 14px;
+        }
+
+        .campo:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+
+        /* TABLA */
+
+        .tabla-contenedor {
+            background: #1b1b32;
+            border: 1px solid #383052;
+            border-radius: 15px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #383052;
+            text-align: left;
+        }
+
+        th {
+            color: #b794ff;
+        }
+
+        .producto {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .producto img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #292943;
+        }
+
+        .sin-imagen {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #292943;
+            border-radius: 8px;
+            font-size: 25px;
+            flex-shrink: 0;
+        }
+
+        .disponible {
+            color: #69e6a4;
+            font-weight: bold;
+        }
+
+        .no-disponible {
+            color: #ff7777;
+            font-weight: bold;
+        }
+
+        /* INDICADORES DE INVENTARIO */
+
+        .inventario {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .inventario-normal {
+            background: #173e30;
+            color: #69e6a4;
+        }
+
+        .inventario-bajo {
+            background: #49351e;
+            color: #ffbf69;
+        }
+
+        .inventario-agotado {
+            background: #4a202d;
+            color: #ff8585;
+        }
+
+        .acciones {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .acciones form {
+            margin: 0;
+        }
+
+        .mensaje-vacio {
+            text-align: center;
+            color: #aaa;
+            padding: 30px;
+        }
+
+        .resultado-busqueda {
+            color: #bbb;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        @media (max-width: 750px) {
+            .filtros-contenido {
+                grid-template-columns: 1fr;
+            }
+
+            .contenedor {
+                margin: 15px auto;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            🎮 NEXUS ADMIN
+        </div>
+
+        <a href="{% url 'panel_admin' %}" class="volver">
+            ← Volver al panel
+        </a>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- ENCABEZADO -->
+
+        <div class="encabezado">
+
+            <div>
+                <h1>📦 Gestión de productos</h1>
+
+                <p class="subtitulo">
+                    Administra el catálogo, consulta existencias
+                    y controla el inventario de NEXUS.
+                </p>
+            </div>
+
+            <a href="{% url 'agregar_producto' %}"
+               class="boton boton-agregar">
+                ➕ Agregar producto
+            </a>
+
+        </div>
+
+
+        <!-- ESTADÍSTICAS -->
+
+        <section class="estadisticas">
+
+            <div class="estadistica">
+                <h3>🎮 Total de productos</h3>
+                <div class="numero" id="totalProductos">0</div>
+                <p>Registrados</p>
+            </div>
+
+            <div class="estadistica">
+                <h3>📦 Inventario normal</h3>
+                <div class="numero" id="inventarioNormal">0</div>
+                <p>Más de 5 unidades</p>
+            </div>
+
+            <div class="estadistica">
+                <h3>⚠️ Existencias bajas</h3>
+                <div class="numero alerta" id="inventarioBajo">0</div>
+                <p>Entre 1 y 5 unidades</p>
+            </div>
+
+            <div class="estadistica">
+                <h3>🚨 Productos agotados</h3>
+                <div class="numero agotado" id="inventarioAgotado">0</div>
+                <p>Sin existencias</p>
+            </div>
+
+        </section>
+
+
+        <!-- BUSCADOR Y FILTROS -->
+
+        <section class="filtros">
+
+            <h2>🔎 Buscar y filtrar productos</h2>
+
+            <div class="filtros-contenido">
+
+                <input
+                    type="search"
+                    id="buscarProducto"
+                    class="campo"
+                    placeholder="Buscar por nombre..."
+                    aria-label="Buscar productos por nombre">
+
+                <select id="filtroCategoria" class="campo"
+                        aria-label="Filtrar por categoría">
+
+                    <option value="todos">
+                        Todas las categorías
+                    </option>
+
+                    <option value="juegos">
+                        Juegos
+                    </option>
+
+                    <option value="consolas">
+                        Consolas
+                    </option>
+
+                    <option value="audifonos">
+                        Audífonos
+                    </option>
+
+                    <option value="teclados_mouse">
+                        Teclados y Mouse
+                    </option>
+
+                </select>
+
+                <select id="filtroInventario" class="campo"
+                        aria-label="Filtrar por inventario">
+
+                    <option value="todos">
+                        Todo el inventario
+                    </option>
+
+                    <option value="normal">
+                        Inventario normal
+                    </option>
+
+                    <option value="bajo">
+                        Existencias bajas
+                    </option>
+
+                    <option value="agotado">
+                        Productos agotados
+                    </option>
+
+                </select>
+
+            </div>
+
+            <p class="resultado-busqueda" id="resultadoBusqueda"
+               aria-live="polite"></p>
+
+        </section>
+
+
+        <!-- TABLA DE PRODUCTOS -->
+
+        <div class="tabla-contenedor">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Existencias</th>
+                        <th>Inventario</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaProductos">
+
+                    {% for producto in productos %}
+
+                        <tr class="fila-producto"
+                            data-nombre="{{ producto.nombre }}"
+                            data-categoria="{{ producto.categoria }}"
+                            data-existencias="{{ producto.existencias }}">
+
+                            <td>
+                                <div class="producto">
+
+                                    {% if producto.imagen %}
+
+                                        <img
+                                            src="{{ producto.imagen.url }}"
+                                            alt="{{ producto.nombre }}">
+
+                                    {% else %}
+
+                                        <div class="sin-imagen">
+                                            🎮
+                                        </div>
+
+                                    {% endif %}
+
+                                    <strong>
+                                        {{ producto.nombre }}
+                                    </strong>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                {{ producto.get_categoria_display }}
+                            </td>
+
+                            <td>
+                                ${{ producto.precio }} MXN
+                            </td>
+
+                            <td>
+                                {{ producto.existencias }}
+                            </td>
+
+                            <td>
+
+                                {% if producto.existencias == 0 %}
+
+                                    <span class="inventario inventario-agotado">
+                                        🚨 Agotado
+                                    </span>
+
+                                {% elif producto.existencias <= 5 %}
+
+                                    <span class="inventario inventario-bajo">
+                                        ⚠️ Pocas unidades
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="inventario inventario-normal">
+                                        ✔️ Normal
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if producto.disponible %}
+
+                                    <span class="disponible">
+                                        Disponible
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="no-disponible">
+                                        No disponible
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <div class="acciones">
+
+                                    <a
+                                        href="{% url 'editar_producto' producto.id %}"
+                                        class="boton boton-editar">
+                                        ✏️ Editar
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'eliminar_producto' producto.id %}"
+                                        onsubmit="return confirm('¿Seguro que deseas eliminar este producto? También se eliminarán sus reseñas vinculadas.')">
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="boton boton-eliminar">
+                                            🗑️ Eliminar
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+                            <td colspan="7" class="mensaje-vacio">
+                                Todavía no hay productos registrados.
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    <tr id="sinResultados" class="oculto">
+                        <td colspan="7" class="mensaje-vacio">
+                            No se encontraron productos con esos filtros.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const buscarProducto =
+            document.getElementById("buscarProducto");
+
+        const filtroCategoria =
+            document.getElementById("filtroCategoria");
+
+        const filtroInventario =
+            document.getElementById("filtroInventario");
+
+        const filas =
+            document.querySelectorAll(".fila-producto");
+
+        const sinResultados =
+            document.getElementById("sinResultados");
+
+        const resultadoBusqueda =
+            document.getElementById("resultadoBusqueda");
+
+
+        function obtenerTipoInventario(existencias) {
+
+            if (existencias === 0) {
+                return "agotado";
+            }
+
+            if (existencias <= 5) {
+                return "bajo";
+            }
+
+            return "normal";
+        }
+
+
+        function actualizarEstadisticas() {
+
+            let normales = 0;
+            let bajos = 0;
+            let agotados = 0;
+
+            filas.forEach(fila => {
+
+                const existencias =
+                    Number(fila.dataset.existencias);
+
+                const tipo =
+                    obtenerTipoInventario(existencias);
+
+                if (tipo === "normal") {
+                    normales++;
+                }
+
+                if (tipo === "bajo") {
+                    bajos++;
+                }
+
+                if (tipo === "agotado") {
+                    agotados++;
+                }
+
+            });
+
+            document.getElementById("totalProductos").textContent =
+                filas.length;
+
+            document.getElementById("inventarioNormal").textContent =
+                normales;
+
+            document.getElementById("inventarioBajo").textContent =
+                bajos;
+
+            document.getElementById("inventarioAgotado").textContent =
+                agotados;
+        }
+
+
+        function filtrarProductos() {
+
+            const texto =
+                buscarProducto.value
+                    .toLocaleLowerCase("es")
+                    .trim();
+
+            const categoria =
+                filtroCategoria.value;
+
+            const inventario =
+                filtroInventario.value;
+
+            let visibles = 0;
+
+            filas.forEach(fila => {
+
+                const nombre =
+                    fila.dataset.nombre
+                        .toLocaleLowerCase("es");
+
+                const categoriaProducto =
+                    fila.dataset.categoria;
+
+                const existencias =
+                    Number(fila.dataset.existencias);
+
+                const tipoInventario =
+                    obtenerTipoInventario(existencias);
+
+                const coincideNombre =
+                    nombre.includes(texto);
+
+                const coincideCategoria =
+                    categoria === "todos" ||
+                    categoriaProducto === categoria;
+
+                const coincideInventario =
+                    inventario === "todos" ||
+                    tipoInventario === inventario;
+
+                const mostrar =
+                    coincideNombre &&
+                    coincideCategoria &&
+                    coincideInventario;
+
+                fila.classList.toggle("oculto", !mostrar);
+
+                if (mostrar) {
+                    visibles++;
+                }
+
+            });
+
+            sinResultados.classList.toggle(
+                "oculto",
+                visibles !== 0 || filas.length === 0
+            );
+
+            resultadoBusqueda.textContent =
+                "Mostrando " + visibles +
+                " de " + filas.length + " productos";
+        }
+
+
+        buscarProducto.addEventListener(
+            "input",
+            filtrarProductos
+        );
+
+        filtroCategoria.addEventListener(
+            "change",
+            filtrarProductos
+        );
+
+        filtroInventario.addEventListener(
+            "change",
+            filtrarProductos
+        );
+
+
+        actualizarEstadisticas();
+        filtrarProductos();
+
+    </script>
+
+</body>
+</html>
+

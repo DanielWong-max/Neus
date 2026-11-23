@@ -1,0 +1,319 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mensajes de clientes | NEXUS ADMIN</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #100e1b;
+            color: white;
+        }
+
+        .encabezado {
+            background: #191429;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3c2e58;
+        }
+
+        .logo {
+            color: #b99aff;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .volver {
+            color: #e8dcff;
+            background: #35274e;
+            padding: 12px 17px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .contenedor {
+            max-width: 1050px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .titulo {
+            margin-bottom: 30px;
+        }
+
+        .titulo h1 {
+            color: #c6aaff;
+            margin-bottom: 10px;
+        }
+
+        .titulo p {
+            color: #b7a8d1;
+        }
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tarjeta {
+            background: #211a32;
+            border: 1px solid #45345f;
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+        .tarjeta h3 {
+            color: #bba0f4;
+            margin: 0 0 12px;
+            font-size: 15px;
+        }
+
+        .tarjeta .numero {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .lista {
+            background: #1b1629;
+            border: 1px solid #423255;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .lista-titulo {
+            background: #261d39;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .conversacion {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 20px;
+            border-top: 1px solid #382d4d;
+            transition: background 0.2s;
+        }
+
+        .conversacion:hover {
+            background: #2b2140;
+        }
+
+        .informacion {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg, #7c3aed, #b58aff
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .nombre {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .detalle {
+            color: #b6a6cf;
+            font-size: 13px;
+        }
+
+        .boton {
+            background: #7c3aed;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .boton:hover {
+            background: #9254f5;
+        }
+
+        .vacio {
+            padding: 60px 20px;
+            text-align: center;
+            color: #b9aad4;
+        }
+
+        .vacio .icono {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 650px) {
+            .estadisticas {
+                grid-template-columns: 1fr;
+            }
+
+            .conversacion {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .boton {
+                text-align: center;
+            }
+
+            .encabezado {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+
+    <header class="encabezado">
+
+        <a href="{% url 'panel_admin' %}" class="logo">
+            NEXUS ADMIN 🎮
+        </a>
+
+        <a href="{% url 'panel_admin' %}" class="volver">
+            ← Volver al panel
+        </a>
+
+    </header>
+
+    <main class="contenedor">
+
+        <!-- TÍTULO -->
+
+        <div class="titulo">
+            <h1>💬 Mensajes de clientes</h1>
+
+            <p>
+                Administra las conversaciones y responde
+                las consultas de los usuarios de NEXUS.
+            </p>
+        </div>
+
+        <!-- ESTADÍSTICAS -->
+
+        <section class="estadisticas">
+
+            <div class="tarjeta">
+                <h3>Conversaciones registradas</h3>
+
+                <div class="numero">
+                    {{ conversaciones|length }}
+                </div>
+            </div>
+
+            <div class="tarjeta">
+                <h3>Centro de atención</h3>
+
+                <div class="numero">
+                    🎧 NEXUS
+                </div>
+            </div>
+
+        </section>
+
+        <!-- LISTA DE CONVERSACIONES -->
+
+        <section class="lista">
+
+            <div class="lista-titulo">
+                📥 Bandeja de entrada
+            </div>
+
+            {% for conversacion in conversaciones %}
+
+                <div class="conversacion">
+
+                    <div class="informacion">
+
+                        <div class="avatar">
+                            👤
+                        </div>
+
+                        <div>
+
+                            <div class="nombre">
+                                {{ conversacion.cliente.username }}
+                            </div>
+
+                            <div class="detalle">
+                                Última actividad:
+                                {{ conversacion.fecha_actualizacion|date:"d/m/Y H:i" }}
+                            </div>
+
+                            {% if conversacion.cliente.email %}
+                                <div class="detalle">
+                                    {{ conversacion.cliente.email }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="{% url 'chat_admin_detalle' conversacion.id %}"
+                        class="boton"
+                    >
+                        💬 Abrir conversación
+                    </a>
+
+                </div>
+
+            {% empty %}
+
+                <div class="vacio">
+
+                    <div class="icono">📭</div>
+
+                    <h3>No hay conversaciones todavía</h3>
+
+                    <p>
+                        Cuando un cliente escriba al soporte,
+                        aparecerá aquí su conversación.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+</body>
+</html>

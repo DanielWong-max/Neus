@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar usuario | NEXUS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0b17;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #17172a;
+            border-bottom: 2px solid #8b5cf6;
+            padding: 25px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #b794ff;
+        }
+
+        .volver {
+            color: #b794ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contenedor {
+            max-width: 750px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .tarjeta {
+            background: #1b1b32;
+            border: 1px solid #383052;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .subtitulo {
+            color: #bbb;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .informacion {
+            background: #292943;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 28px;
+        }
+
+        .informacion p {
+            margin: 8px 0;
+        }
+
+        .informacion strong {
+            color: #c4a7ff;
+        }
+
+        .campo {
+            margin-bottom: 22px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px;
+            background: #10101e;
+            border: 1px solid #51416f;
+            border-radius: 9px;
+            color: white;
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox input {
+            width: 20px;
+            height: 20px;
+            accent-color: #8b5cf6;
+        }
+
+        .checkbox label {
+            cursor: pointer;
+        }
+
+        .ayuda {
+            color: #aaa;
+            font-size: 13px;
+            margin: 5px 0 20px 32px;
+        }
+
+        .error {
+            color: #ff8585;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 13px 22px;
+            border: none;
+            border-radius: 9px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .guardar {
+            background: #8b5cf6;
+        }
+
+        .guardar:hover {
+            background: #a78bfa;
+        }
+
+        .cancelar {
+            background: #34344e;
+        }
+
+        .cancelar:hover {
+            background: #454563;
+        }
+
+        .advertencia {
+            background: #382b22;
+            border: 1px solid #705135;
+            border-radius: 10px;
+            padding: 15px;
+            color: #ffd49c;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor {
+                margin: 15px auto;
+                padding: 15px;
+            }
+
+            .tarjeta {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            🎮 NEXUS ADMIN
+        </div>
+
+        <a href="{% url 'administrar_usuarios' %}"
+           class="volver">
+            ← Volver a usuarios
+        </a>
+    </header>
+
+    <main class="contenedor">
+
+        <div class="tarjeta">
+
+            <h1>✏️ Editar usuario</h1>
+
+            <p class="subtitulo">
+                Modifica la información de la cuenta
+                y administra sus permisos de acceso.
+            </p>
+
+            <!-- INFORMACIÓN DE LA CUENTA -->
+
+            <div class="informacion">
+
+                <p>
+                    <strong>Usuario:</strong>
+                    {{ usuario_editado.username }}
+                </p>
+
+                <p>
+                    <strong>Fecha de registro:</strong>
+                    {{ usuario_editado.date_joined|date:"d/m/Y" }}
+                </p>
+
+                <p>
+                    <strong>Tipo de cuenta:</strong>
+
+                    {% if usuario_editado.is_superuser %}
+                        Superusuario
+                    {% elif usuario_editado.is_staff %}
+                        Administrador
+                    {% else %}
+                        Cliente
+                    {% endif %}
+                </p>
+
+            </div>
+
+            <!-- FORMULARIO -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {% if formulario.non_field_errors %}
+                    <div class="error">
+                        {{ formulario.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- NOMBRE -->
+
+                <div class="campo">
+                    <label for="{{ formulario.first_name.id_for_label }}">
+                        Nombre
+                    </label>
+
+                    {{ formulario.first_name }}
+
+                    <div class="error">
+                        {{ formulario.first_name.errors }}
+                    </div>
+                </div>
+
+                <!-- APELLIDOS -->
+
+                <div class="campo">
+                    <label for="{{ formulario.last_name.id_for_label }}">
+                        Apellidos
+                    </label>
+
+                    {{ formulario.last_name }}
+
+                    <div class="error">
+                        {{ formulario.last_name.errors }}
+                    </div>
+                </div>
+
+                <!-- CORREO -->
+
+                <div class="campo">
+                    <label for="{{ formulario.email.id_for_label }}">
+                        Correo electrónico
+                    </label>
+
+                    {{ formulario.email }}
+
+                    <div class="error">
+                        {{ formulario.email.errors }}
+                    </div>
+                </div>
+
+                <!-- ESTADO DE LA CUENTA -->
+
+                <div class="checkbox">
+
+                    {{ formulario.is_active }}
+
+                    <label for="{{ formulario.is_active.id_for_label }}">
+                        Cuenta activa
+                    </label>
+
+                </div>
+
+                <p class="ayuda">
+                    Si desactivas esta opción, el usuario
+                    no podrá iniciar sesión.
+                </p>
+
+                <!-- PERMISOS -->
+
+                <div class="checkbox">
+
+                    {{ formulario.is_staff }}
+
+                    <label for="{{ formulario.is_staff.id_for_label }}">
+                        Permisos de administrador
+                    </label>
+
+                </div>
+
+                <p class="ayuda">
+                    Al activar esta opción, el usuario podrá
+                    acceder a las funciones administrativas
+                    de NEXUS.
+                </p>
+
+                <div class="advertencia">
+                    ⚠️ Los permisos de administrador permiten
+                    gestionar productos, inventario y consultar
+                    cuentas de usuarios. Concédelos únicamente
+                    a personas de confianza.
+                </div>
+
+                <!-- BOTONES -->
+
+                <div class="acciones">
+
+                    <button type="submit"
+                            class="boton guardar">
+                        💾 Guardar cambios
+                    </button>
+
+                    <a href="{% url 'administrar_usuarios' %}"
+                       class="boton cancelar">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

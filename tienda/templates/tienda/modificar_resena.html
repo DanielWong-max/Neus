@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar reseña | NEXUS</title>
+
+    <style>
+        body {
+            background: #101b30;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .contenedor {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #b9a5ff;
+        }
+
+        .formulario {
+            background: #34466e;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+        button {
+            background: #8b70ef;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #7055d4;
+        }
+
+        a {
+            color: #b9a5ff;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1>🎮 Modificar reseña</h1>
+
+        <div class="formulario">
+            <form method="POST">
+                {% csrf_token %}
+
+                <label>Nombre del videojuego</label>
+                <input
+                    type="text"
+                    name="videojuego"
+                    value="{{ resena.videojuego }}"
+                    required
+                >
+
+                <label>Calificación</label>
+                <select name="calificacion" required>
+                    {% for numero in "12345" %}
+                    <option value="{{ numero }}"
+                        {% if resena.calificacion|stringformat:"s" == numero %}selected{% endif %}>
+                        {{ numero }} estrella(s)
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label>Comentario</label>
+                <textarea name="comentario" required>{{ resena.comentario }}</textarea>
+
+                <button type="submit">
+                    Guardar cambios
+                </button>
+            </form>
+        </div>
+
+        <a href="{% url 'resenas' %}">
+            ← Volver a las reseñas
+        </a>
+    </div>
+</body>
+</html>

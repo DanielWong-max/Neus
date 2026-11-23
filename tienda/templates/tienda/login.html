@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesión | NEXUS</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #102c54, #5143a5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login {
+            background: #142f50;
+            padding: 40px;
+            border-radius: 18px;
+            width: 350px;
+            max-width: 80%;
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            color: #b6a5ff;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #8276ed;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        a {
+            color: #c5baff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login">
+
+        <h1>NEXUS ✦</h1>
+        <h2>Iniciar sesión</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <p style="color: #ffaaaa;">
+                    Usuario o contraseña incorrectos.
+                </p>
+            {% endif %}
+
+            <input type="text"
+                   name="username"
+                   placeholder="Nombre de usuario"
+                   required>
+
+            <input type="password"
+                   name="password"
+                   placeholder="Contraseña"
+                   required>
+
+            <button type="submit">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+        <p>¿No tienes cuenta?</p>
+        <a href="{% url 'registro' %}">
+            Crear cuenta
+        </a>
+
+        <p>
+            <a href="{% url 'inicio' %}">
+                Volver a NEXUS
+            </a>
+        </p>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Mis pedidos | NEXUS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0b17;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #17172a;
+            border-bottom: 1px solid #40315e;
+            padding: 22px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: #a78bfa;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #a78bfa;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .encabezado {
+            margin-bottom: 35px;
+        }
+
+        .encabezado h1 {
+            color: #c4b5fd;
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .encabezado p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .pedido {
+            background: #1b1b32;
+            border: 1px solid #40315e;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.2);
+        }
+
+        .pedido-superior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #35314d;
+        }
+
+        .pedido-superior h2 {
+            color: #c4b5fd;
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+
+        .fecha {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .estado {
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            background: #4b3515;
+            color: #ffd27a;
+        }
+
+        .producto {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #302b45;
+        }
+
+        .producto h3 {
+            margin: 0 0 7px;
+            font-size: 16px;
+        }
+
+        .producto p {
+            margin: 0;
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        .producto strong {
+            color: #ddd6fe;
+            white-space: nowrap;
+        }
+
+        .pedido-inferior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-top: 20px;
+        }
+
+        .total {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .total span {
+            color: #a78bfa;
+        }
+
+        .boton {
+            display: inline-block;
+            background: #8b5cf6;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .boton:hover {
+            background: #a78bfa;
+            transform: translateY(-2px);
+        }
+
+        .vacio {
+            background: #1b1b32;
+            border: 1px solid #40315e;
+            border-radius: 18px;
+            padding: 65px 25px;
+            text-align: center;
+        }
+
+        .vacio .icono {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        .vacio h2 {
+            color: #c4b5fd;
+        }
+
+        .vacio p {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            padding: 25px;
+            margin-top: 60px;
+            border-top: 1px solid #25253b;
+        }
+
+        @media (max-width: 600px) {
+            .encabezado h1 {
+                font-size: 27px;
+            }
+
+            .pedido {
+                padding: 18px;
+            }
+
+            .producto {
+                align-items: flex-start;
+            }
+
+            .pedido-inferior {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .boton {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'inicio' %}" class="logo">
+        NEXUS ✦
+    </a>
+
+    <nav>
+        <a href="{% url 'inicio' %}">
+            🏠 Inicio
+        </a>
+
+        <a href="{% url 'inicio' %}#catalogo">
+            🎮 Productos
+        </a>
+    </nav>
+</header>
+
+<main>
+
+    <div class="encabezado">
+        <h1>📦 Mis pedidos</h1>
+
+        <p>
+            Hola, {{ request.user.username }}.
+            Aquí puedes consultar tu historial de compras
+            y revisar el estado de tus pedidos.
+        </p>
+    </div>
+
+    {% for pedido in pedidos %}
+
+    <article class="pedido">
+
+        <div class="pedido-superior">
+
+            <div>
+                <h2>Pedido #{{ pedido.id }}</h2>
+
+                <span class="fecha">
+                    📅 {{ pedido.fecha|date:"d/m/Y H:i" }}
+                </span>
+            </div>
+
+            <span class="estado">
+                {{ pedido.get_estado_display }}
+            </span>
+
+        </div>
+
+        {% for detalle in pedido.detalles.all %}
+
+        <div class="producto">
+
+            <div>
+                <h3>{{ detalle.nombre_producto }}</h3>
+
+                <p>
+                    Cantidad: {{ detalle.cantidad }}
+                    |
+                    Precio unitario:
+                    ${{ detalle.precio_unitario|floatformat:2 }}
+                </p>
+            </div>
+
+            <strong>
+                ${{ detalle.subtotal|floatformat:2 }}
+            </strong>
+
+        </div>
+
+        {% empty %}
+
+        <p style="color:#aaa;">
+            No hay productos registrados.
+        </p>
+
+        {% endfor %}
+
+        <div class="pedido-inferior">
+
+            <div class="total">
+                Total:
+                <span>
+                    ${{ pedido.total|floatformat:2 }} MXN
+                </span>
+            </div>
+
+            <a
+                href="{% url 'confirmacion_pedido' pedido.id %}"
+                class="boton"
+            >
+                👁️ Ver detalles
+            </a>
+
+        </div>
+
+    </article>
+
+    {% empty %}
+
+    <div class="vacio">
+
+        <div class="icono">🛒</div>
+
+        <h2>Todavía no tienes pedidos</h2>
+
+        <p>
+            Explora nuestro catálogo y encuentra
+            tu próximo videojuego favorito.
+        </p>
+
+        <a href="{% url 'inicio' %}#catalogo"
+           class="boton">
+            🎮 Explorar productos
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</main>
+
+<footer>
+    © 2026 NEXUS | Tu universo gaming
+</footer>
+
+</body>
+</html>
