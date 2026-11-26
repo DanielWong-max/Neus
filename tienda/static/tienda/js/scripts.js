@@ -2,7 +2,7 @@
 /* =========================================
    NEXUS - TIENDA DE VIDEOJUEGOS
    CATALOGO, CARRITO Y PAGOS SIMULADOS
-   VERSION 6
+   VERSION 7
 ========================================= */
 
 // =========================================
@@ -10,6 +10,7 @@
 // =========================================
 
 let productos = [];
+const IMAGEN_DEFAULT_GLOBAL = "/static/tienda/img/sin-imagen.png";
 
 const datosDjango = document.getElementById(
     "productos-django"
@@ -19,16 +20,22 @@ if (datosDjango) {
     try {
         const datos = JSON.parse(datosDjango.textContent);
 
-        productos = datos.map(p => ({
-            id: 1000000 + Number(p.id),
-            idDjango: Number(p.id),
-            nombre: p.nombre,
-            categoria: p.categoria,
-            precio: Number(p.precio),
-            imagen: p.imagen || "🎮",
-            existencias: Number(p.existencias),
-            desdeDjango: true
-        }));
+        productos = datos.map(p => {
+            const imagenDefault = p.imagen_default || IMAGEN_DEFAULT_GLOBAL;
+            const imagenReal = (p.imagen || "").trim();
+
+            return {
+                id: 1000000 + Number(p.id),
+                idDjango: Number(p.id),
+                nombre: p.nombre,
+                categoria: p.categoria,
+                precio: Number(p.precio),
+                imagen: imagenReal || imagenDefault,
+                imagenDefault: imagenDefault,
+                existencias: Number(p.existencias),
+                desdeDjango: true
+            };
+        });
     } catch (error) {
         console.error("Error cargando productos:", error);
     }
@@ -95,26 +102,30 @@ function obtenerValor(id) {
 }
 
 function mostrarImagen(producto, ancho, alto) {
-    if (
-        producto.desdeDjango &&
-        producto.imagen &&
-        producto.imagen !== "🎮"
-    ) {
-        return `
-            <img
-                src="${escaparHTML(producto.imagen)}"
-                alt="${escaparHTML(producto.nombre)}"
-                style="
-                    width:${ancho}px;
-                    height:${alto}px;
-                    max-width:100%;
-                    object-fit:contain;
-                "
-            >
-        `;
+    const respaldo =
+        producto.imagenDefault || IMAGEN_DEFAULT_GLOBAL;
+    const ruta =
+        (producto.imagen && producto.imagen !== "🎮")
+            ? producto.imagen
+            : respaldo;
+
+    if (!producto.desdeDjango && producto.imagen === "🎮") {
+        return "🎮";
     }
 
-    return "🎮";
+    return `
+        <img
+            src="${escaparHTML(ruta)}"
+            alt="${escaparHTML(producto.nombre)}"
+            onerror="this.onerror=null;this.src='${escaparHTML(respaldo)}';"
+            style="
+                width:${ancho}px;
+                height:${alto}px;
+                max-width:100%;
+                object-fit:contain;
+            "
+        >
+    `;
 }
 
 // =========================================
@@ -346,6 +357,7 @@ function agregarCarrito(id) {
         existente.precio = producto.precio;
         existente.nombre = producto.nombre;
         existente.imagen = producto.imagen;
+        existente.imagenDefault = producto.imagenDefault;
         existente.existencias = producto.existencias;
     } else {
         carrito.push({
