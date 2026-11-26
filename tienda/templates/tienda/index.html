@@ -1295,7 +1295,9 @@
     "nombre": "{{ producto.nombre|escapejs }}",
     "categoria": "{{ producto.get_categoria_display|escapejs }}",
     "precio": {{ producto.precio|stringformat:".2f" }},
-    "imagen": "{% if producto.imagen %}{{ producto.imagen.name|escapejs }}{% endif %}",
+    
+"imagen": "{% if producto.imagen %}/media/{{ producto.imagen.name|escapejs }}{% endif %}",
+
     "imagen_default": "{% static 'tienda/img/sin-imagen.png' %}",
     "existencias": {{ producto.existencias }}
 }{% if not forloop.last %},{% endif %}
