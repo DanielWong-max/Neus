@@ -1273,7 +1273,7 @@
     </p>
 
     <p>
-        © 2026 NEXUS -
+        ©️ 2026 NEXUS -
         Todos los derechos reservados.
     </p>
 
@@ -1296,6 +1296,7 @@
     "categoria": "{{ producto.get_categoria_display|escapejs }}",
     "precio": {{ producto.precio|stringformat:".2f" }},
     "imagen": "{% if producto.imagen %}{{ producto.imagen.url|escapejs }}{% endif %}",
+    "imagen_default": "{% static 'tienda/img/sin-imagen.png' %}",
     "existencias": {{ producto.existencias }}
 }{% if not forloop.last %},{% endif %}
 {% endfor %}
@@ -1307,9 +1308,7 @@
      JAVASCRIPT PRINCIPAL
 ========================================== -->
 
-<script src="{% static 'tienda/js/scripts.js' %}?v=6"></script>
+<script src="{% static 'tienda/js/scripts.js' %}?v=7"></script>
 
 </body>
 </html>
-
-
